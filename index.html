@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc ngủ ngon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .moon {
+            width: 100px;
+            height: 100px;
+            background-color: #f5f5dc;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #fff;
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            background-color: #ff8e8e;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        /* Hiệu ứng icon bay ra */
+        
+        .flying-icon {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: fly 2s ease-out forwards;
+            opacity: 0;
+            z-index: 5;
+        }
+        
+        @keyframes fly {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            70% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--r));
+                opacity: 0;
+            }
+        }
+        
+        .heart {
+            color: #ff6b6b;
+        }
+        
+        .star-icon {
+            color: #ffde59;
+        }
+        
+        .moon-icon {
+            color: #f5f5dc;
+        }
+        
+        .zzz {
+            color: #a2d2ff;
+        }
+        
+        .flower {
+            color: #ff9ff3;
+        }
+        
+        .flower2 {
+            color: #feca57;
+        }
+        
+        .flower3 {
+            color: #5fdd9d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="moon"></div>
+
+    <div class="container">
+        <h1>Chúc ngủ ngon!</h1>
+        <p>Chúc bạn có một giấc ngủ thật ngon và những giấc mơ đẹp. Mai thức dậy tràn đầy năng lượng!</p>
+        <button id="wishBtn">Gửi lời chúc <i class="fas fa-magic"></i></button>
+    </div>
+
+    <script>
+        // Tạo sao lấp lánh
+        function createStars() {
+            const count = 50;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // Kích thước ngẫu nhiên
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // Vị trí ngẫu nhiên
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+
+                // Độ trễ animation ngẫu nhiên
+                star.style.animationDelay = `${Math.random() * 2}s`;
+
+                document.body.appendChild(star);
+            }
+        }
+
+        // Danh sách lời chúc
+        const messages = [
+            "Ngủ ngon nhé! Mai là một ngày mới tuyệt vời!",
+            "Chúc bạn mơ thật nhiều giấc mơ đẹp!",
+            "Nghỉ ngơi đi nhé, ngày mai còn nhiều điều tốt đẹp đang chờ!",
+            "Đêm nay ngủ ngon, ngày mai tỏa sáng!",
+            "Hãy tắt máy và đi ngủ thôi nào!",
+            "Một ngày vất vả rồi, giờ là lúc thư giãn và nghỉ ngơi!"
+        ];
+
+        // Danh sách icon sẽ bay ra
+        const icons = [{
+            class: "fas fa-heart",
+            style: "heart"
+        }, {
+            class: "fas fa-star",
+            style: "star-icon"
+        }, {
+            class: "fas fa-moon",
+            style: "moon-icon"
+        }, {
+            class: "fas fa-cloud",
+            style: ""
+        }, {
+            class: "fas fa-bolt",
+            style: ""
+        }, {
+            class: "fas fa-zzz",
+            style: "zzz"
+        }, {
+            class: "fas fa-feather",
+            style: ""
+        }, {
+            class: "fas fa-sparkles",
+            style: "star-icon"
+        }, {
+            class: "fas fa-spa",
+            style: "flower"
+        }, {
+            class: "fas fa-leaf",
+            style: "flower3"
+        }, {
+            class: "fab fa-pagelines",
+            style: "flower2"
+        }, {
+            class: "fas fa-seedling",
+            style: "flower3"
+        }];
+
+        // Tạo hiệu ứng icon bay ra
+        function createFlyingIcons(x, y) {
+            const count = 30;
+
+            for (let i = 0; i < count; i++) {
+                const icon = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+                icon.className = randomIcon.class;
+                if (randomIcon.style) {
+                    icon.classList.add(randomIcon.style);
+                }
+
+                icon.classList.add('flying-icon');
+
+                // Vị trí bắt đầu (từ nút nhấn)
+                icon.style.left = `${x}px`;
+                icon.style.top = `${y}px`;
+
+                // Hướng bay ngẫu nhiên
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 150;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+
+                // Xoay icon ngẫu nhiên
+                const rotation = Math.random() * 360;
+
+                icon.style.setProperty('--tx', `${tx}px`);
+                icon.style.setProperty('--ty', `${ty}px`);
+                icon.style.setProperty('--r', `${rotation}deg`);
+
+                // Kích thước ngẫu nhiên
+                const size = 0.5 + Math.random() * 1.5;
+                icon.style.fontSize = `${size}em`;
+
+                // Thời gian bay ngẫu nhiên
+                const duration = 1 + Math.random() * 1.5;
+                icon.style.animationDuration = `${duration}s`;
+
+                document.body.appendChild(icon);
+
+                // Xóa icon sau khi bay xong
+                setTimeout(() => {
+                    icon.remove();
+                }, duration * 1000);
+            }
+        }
+
+        // Xử lý khi nhấn nút
+        document.getElementById('wishBtn').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            // Tạo hiệu ứng icon bay
+            createFlyingIcons(x, y);
+
+            // Hiển thị lời chúc ngẫu nhiên
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+            // Tạo thông báo đẹp hơn
+            const notification = document.createElement('div');
+            notification.textContent = randomMessage;
+            notification.style.position = 'fixed';
+            notification.style.top = '50%';
+            notification.style.left = '50%';
+            notification.style.transform = 'translate(-50%, -50%)';
+            notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            notification.style.color = 'white';
+            notification.style.padding = '20px 30px';
+            notification.style.borderRadius = '10px';
+            notification.style.zIndex = '100';
+            notification.style.fontSize = '1.2em';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+            notification.style.animation = 'fadeIn 0.5s, fadeOut 0.5s 2.5s forwards';
+
+            document.body.appendChild(notification);
+
+            // Tự động xóa thông báo sau 3 giây
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        });
+
+        // Thêm animation cho thông báo
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translate(-50%, -40%); }
+                to { opacity: 1; transform: translate(-50%, -50%); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translate(-50%, -50%); }
+                to { opacity: 0; transform: translate(-50%, -60%); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Khởi tạo sao khi trang load
+        window.onload = createStars;
+    </script>
+</body>
+
+</html>
